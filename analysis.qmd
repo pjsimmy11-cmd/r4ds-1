@@ -2,4 +2,41 @@
 title: "Analyzing Music Data"
 author: "GitHub Copilot"
 format: html
+execute:
+  echo: false
 ---
+
+
+```{r}
+#| label: plot-top10-highlights
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+# Define the 3 notable songs from the previous exercise
+notable_songs <- c("Song A", "Song B", "Song C")
+
+# Filter dataset for songs that reached the top 10
+top_10_data <- chart_data %>%
+  filter(peak_rank <= 10)
+
+# Create the plot
+ggplot(top_10_data, aes(x = week, y = rank, group = song_id)) +
+  # Background layer: All top-10 songs in gray
+  geom_line(color = "gray80", alpha = 0.6) +
+  # Foreground layer: Highlight notable songs with color mapping for legend
+  geom_line(
+    data = filter(top_10_data, song_name %in% notable_songs),
+    aes(color = song_name),
+    linewidth = 1
+  ) +
+  scale_y_reverse() +
+  labs(
+    x = "Week",
+    y = "Chart Position",
+    color = "Notable Songs",
+    title = "Top 10 Songs Chart Trajectories"
+  ) +
+  theme_minimal()
+```
